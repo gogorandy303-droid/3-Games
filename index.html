@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gerund Space Games</title>
+<style>
+:root{--bg:#0B1033;--card:#1B2260;--y:#FFD93D;--pk:#FF5FA2;--cy:#4DD8FF;--gr:#6BE08B;--pu:#A66CFF;--tx:#fff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font-family:Verdana,Geneva,sans-serif}
+body{background:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 120px 90px,#fff8,transparent),radial-gradient(1.5px 1.5px at 200px 40px,#fff,transparent),radial-gradient(2px 2px at 70px 160px,#fffa,transparent),radial-gradient(1.5px 1.5px at 260px 140px,#fff,transparent),var(--bg);background-size:300px 200px;animation:drift 60s linear infinite}
+@keyframes drift{to{background-position:-300px 200px}}
+#app{max-width:760px;margin:0 auto;padding:14px}
+.screen{display:none}.screen.on{display:block}
+h1{font-size:clamp(28px,7vw,44px);color:var(--y);text-align:center;margin:8px 0}
+.sub{text-align:center;color:var(--cy);font-weight:bold;margin-bottom:18px;font-size:clamp(14px,3.6vw,18px)}
+.menu{display:grid;gap:14px}
+.mc{border:3px solid #fff3;border-radius:22px;padding:18px;font:inherit;color:var(--bg);font-weight:bold;font-size:clamp(18px,4.6vw,24px);text-align:left;cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform .15s}
+.mc:hover{transform:scale(1.03) rotate(-1deg)}.mc small{display:block;font-size:.62em;font-weight:normal;margin-top:4px}
+.mc .e{font-size:2.2em}.best{margin-left:auto;font-size:.7em;background:#0006;color:#fff;border-radius:12px;padding:4px 10px;white-space:nowrap}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-weight:bold;font-size:clamp(15px,4vw,19px)}
+.bar .sp{flex:1}
+button.b{font:inherit;font-weight:bold;border:0;border-radius:16px;padding:10px 18px;background:var(--y);color:var(--bg);cursor:pointer;font-size:clamp(15px,4vw,18px)}
+button.b:active{transform:scale(.95)}
+.card{background:var(--card);border:2px solid #fff3;border-radius:20px;padding:16px;text-align:center}
+.sent{font-size:clamp(22px,6vw,34px);font-weight:bold;min-height:1.6em}
+.sent u{color:var(--y);text-decoration:underline}
+#field{position:relative;height:min(52vh,380px);margin-top:12px;border-radius:20px;border:2px dashed #fff3;overflow:hidden;background:#0004}
+.ast{position:absolute;top:0;width:30%;padding:16px 4px;border:0;border-radius:50% 46% 52% 48%;font:inherit;font-weight:bold;font-size:clamp(15px,4.4vw,22px);color:var(--bg);cursor:pointer;box-shadow:inset -8px -8px 0 #0003}
+.bad{opacity:.35;pointer-events:none}
+.tiles,.ansline{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0}
+.ansline{min-height:64px;border-bottom:3px dashed var(--cy);padding-bottom:8px}
+.tile{border:0;border-radius:14px;padding:12px 16px;font:inherit;font-weight:bold;font-size:clamp(18px,5vw,26px);background:var(--cy);color:var(--bg);cursor:pointer}
+.tile.a{background:var(--y)}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.opt{border:0;border-radius:18px;padding:18px 4px;font:inherit;font-weight:bold;font-size:clamp(16px,4.6vw,24px);color:var(--bg);cursor:pointer}
+.track{position:relative;height:42vh;max-height:300px;width:70px;margin:0 auto;border-radius:35px;background:#fff1;border:2px solid #fff3}
+#rocket{position:absolute;left:50%;bottom:0;font-size:38px;transform:translateX(-50%);transition:bottom .8s ease}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pop{animation:pp .5s}@keyframes pp{50%{transform:scale(1.25)}}
+#msg{min-height:1.5em;font-weight:bold;color:var(--gr);margin-top:10px;text-align:center;font-size:clamp(14px,4vw,18px)}
+#end{position:fixed;inset:0;background:#0B1033ee;display:none;align-items:center;justify-content:center;z-index:9;padding:20px}
+#end.on{display:flex}#end .card{max-width:420px;width:100%}
+#end h2{color:var(--y);font-size:clamp(26px,7vw,36px);margin:4px 0}
+.stars{font-size:42px;margin:6px 0}
+</style></head><body><div id="app">
+
+<div class="screen on" id="menu">
+<h1>🚀 Gerund Space Games</h1><div class="sub">Pick a mission, Space Star!</div>
+<div class="menu">
+<button class="mc" style="background:var(--pk)" onclick="g1()"><span class="e">☄️</span><span>Asteroid Rush<small>Catch the right word!</small></span><span class="best" id="b1"></span></button>
+<button class="mc" style="background:var(--cy)" onclick="g2()"><span class="e">🧩</span><span>Sentence Builder<small>Put the words in order!</small></span><span class="best" id="b2"></span></button>
+<button class="mc" style="background:var(--gr)" onclick="g3()"><span class="e">🚀</span><span>Rocket Fuel<small>Spell the -ing word!</small></span><span class="best" id="b3"></span></button>
+</div></div>
+
+<div class="screen" id="s1"><div class="bar"><button class="b" onclick="home()">⬅ Menu</button><span class="sp"></span><span id="h1"></span></div>
+<div class="card sent" id="q1"></div><div id="field"></div></div>
+
+<div class="screen" id="s2"><div class="bar"><button class="b" onclick="home()">⬅ Menu</button><span class="sp"></span><span id="h2"></span></div>
+<div class="card"><div style="color:var(--cy);font-weight:bold">Tap the words in the right order 👇</div>
+<div class="ansline" id="ans"></div><div class="tiles" id="tiles"></div></div></div>
+
+<div class="screen" id="s3"><div class="bar"><button class="b" onclick="home()">⬅ Menu</button><span class="sp"></span><span id="h3"></span></div>
+<div style="display:flex;gap:16px;align-items:center"><div class="track"><div id="rocket">🚀</div></div>
+<div style="flex:1"><div class="card"><div style="color:var(--cy);font-weight:bold">Add -ing to:</div><div class="sent" id="q3" style="color:var(--y)"></div></div>
+<div class="opts" id="o3" style="grid-template-columns:1fr"></div><div id="msg"></div></div></div></div>
+
+</div>
+<div id="end"><div class="card"><div class="stars" id="es"></div><h2 id="et"></h2><p id="ep"></p>
+<button class="b" id="e1">Play again 🔁</button> <button class="b" style="background:var(--cy)" onclick="home()">Menu 🏠</button></div></div>
+
+<script>
+const $=s=>document.querySelector(s),sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const COL=['var(--pk)','var(--cy)','var(--gr)','var(--y)','var(--pu)'];
+let AC;function beep(f,d=.15,t='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+const good=()=>{beep(660);setTimeout(()=>beep(880),120)},bad=()=>beep(180,.25,'sawtooth');
+function best(k,v){try{const o=+localStorage.getItem(k)||0;if(v!==undefined&&v>o)localStorage.setItem(k,v);return Math.max(o,v||0)}catch(e){return v||0}}
+function showBest(){[1,2,3].forEach(i=>{const b=best('gg'+i);$('#b'+i).textContent=b?'🏆 '+b:''})}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
+function home(){stopAll();$('#end').classList.remove('on');showBest();show('menu')}
+let live=0;const stopAll=()=>{live++;document.getElementById('field').innerHTML=''};
+function end(k,score,max,again,title){const st=score>=max*.8?3:score>=max*.5?2:1;best('gg'+k,score);
+$('#es').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('#et').textContent=title;$('#ep').textContent='Your score: '+score+' points';$('#e1').onclick=()=>{$('#end').classList.remove('on');again()};$('#end').classList.add('on');good()}
+
+/* Game 1 */
+const Q=[["I enjoy ___ football.","playing","play","played"],["She likes ___ pictures.","drawing","draw","drew"],["We love ___ in the sea.","swimming","swim","swam"],["He hates ___ his room.","cleaning","clean","cleaned"],["I dislike ___ up early.","waking","wake","woke"],["I don’t mind ___ you.","helping","help","helped"],["She finished ___ the story.","reading","reads","read"],["I prefer ___ juice.","drinking","drink","drank"],["They enjoy ___ songs.","singing","sing","sang"],["He finished ___ his homework.","doing","do","did"],["She hates ___ the dishes.","washing","wash","washed"],["We love ___ games.","playing","play","played"]];
+let G;function g1(){stopAll();G={s:0,l:3,r:0,q:sh(Q).slice(0,10),lock:false,id:live};show('s1');n1()}
+function hud1(){$('#h1').textContent='⭐ '+G.s+'   '+'❤️'.repeat(Math.max(G.l,0))+'  '+Math.min(G.r+1,10)+'/10'}
+function n1(){const me=G.id;if(G.l<=0||G.r>=10)return end(1,G.s,100,g1,G.l<=0?'Oh no! Try again 🛸':'Mission Complete! 🏆');
+hud1();G.lock=false;const q=G.q[G.r],f=$('#field');f.innerHTML='';const[t,a,...w]=q;
+const p=t.split('___');$('#q1').innerHTML=p[0]+'<u id="bl">______</u>'+p[1];
+const lanes=sh([0,1,2]),H=f.clientHeight,dur=Math.max(3800,9500-G.r*600);
+sh([a,...w]).forEach((o,i)=>{const b=document.createElement('button');b.className='ast';b.textContent=o;b.style.background=COL[i+1];b.style.left=(lanes[i]*33+2)+'%';b.style.top=(i*-30)+'px';f.appendChild(b);
+const an=b.animate([{transform:'translateY(0)'},{transform:`translateY(${H+60}px)`}],{duration:dur+i*500,fill:'forwards',easing:'linear'});
+an.onfinish=()=>{if(o===a&&!G.lock&&G.id===me){G.lock=true;G.l--;bad();$('#bl').textContent=a;G.r++;hud1();setTimeout(()=>G.id===me&&n1(),1500)}};
+b.onclick=()=>{if(G.lock)return;if(o===a){G.lock=true;G.s+=10;G.r++;good();b.textContent='💥';$('#bl').textContent=a;f.getAnimations({subtree:true}).forEach(x=>x.pause());hud1();setTimeout(()=>G.id===me&&n1(),900)}else{G.l--;bad();b.classList.add('bad');hud1();if(G.l<=0){G.lock=true;$('#bl').textContent=a;setTimeout(()=>G.id===me&&n1(),1400)}}}})}
+
+/* Game 2 */
+const S=[["I enjoy playing football."],["She likes drawing pictures."],["We love swimming in the sea."],["He hates cleaning his room."],["I don’t mind helping you."],["She finished reading the story."],["They enjoy singing songs."],["I prefer drinking juice."],["He finished doing his homework."],["We like playing games."]].map(x=>x[0]);
+function g2(){stopAll();G={s:0,i:0,q:sh(S).slice(0,8),id:live};show('s2');n2()}
+function n2(){if(G.i>=8)return end(2,G.s,80,g2,'Great Builder! 🧩');$('#h2').textContent='⭐ '+G.s+'   '+(G.i+1)+'/8';const w=G.q[G.i].split(' ');G.w=w;G.ord=sh(w.map((x,i)=>i));G.pick=[];G.tries=0;r2()}
+function r2(){const A=$('#ans'),T=$('#tiles');A.innerHTML='';T.innerHTML='';
+G.pick.forEach(i=>{const b=document.createElement('button');b.className='tile a';b.textContent=G.w[i];b.onclick=()=>{G.pick=G.pick.filter(x=>x!==i);r2()};A.appendChild(b)});
+G.ord.filter(i=>!G.pick.includes(i)).forEach(i=>{const b=document.createElement('button');b.className='tile';b.textContent=G.w[i];b.onclick=()=>{G.pick.push(i);beep(520,.08);r2();if(G.pick.length===G.w.length)chk2()};T.appendChild(b)})}
+function chk2(){const me=G.id;if(G.pick.map(i=>G.w[i]).join(' ')===G.q[G.i]){G.s+=G.tries?5:10;good();$('#ans').classList.add('pop');setTimeout(()=>{if(G.id!==me)return;$('#ans').classList.remove('pop');G.i++;n2()},1000)}else{G.tries++;bad();$('#ans').classList.add('shake');setTimeout(()=>{if(G.id!==me)return;$('#ans').classList.remove('shake');G.pick=[];r2()},700)}}
+
+/* Game 3 */
+const V=['play','make','run','swim','dance','clean','write','stop','sit','jump','ride','cook','shop','help'],D=['run','swim','stop','sit','shop'];
+const ing=w=>D.includes(w)?w+w.slice(-1)+'ing':w.endsWith('e')?w.slice(0,-1)+'ing':w+'ing';
+const rule=w=>D.includes(w)?'Double the last letter, then add -ing':w.endsWith('e')?'Drop the e, then add -ing':'Just add -ing';
+function g3(){stopAll();G={s:0,i:0,q:sh(V).slice(0,10),id:live};show('s3');$('#rocket').style.bottom='0';n3()}
+function n3(){if(G.i>=10){$('#rocket').style.bottom='calc(100% - 44px)';return setTimeout(()=>end(3,G.s,100,g3,'Blast off! 🚀'),1200)}
+$('#h3').textContent='⭐ '+G.s+'   '+(G.i+1)+'/10';$('#msg').textContent='';const w=G.q[G.i];G.t=0;$('#q3').textContent=w+' + ing = ?';
+const c=ing(w),o=sh([c,...sh([w+'ing',w.slice(0,-1)+'ing',w+w.slice(-1)+'ing']).filter(x=>x!==c).slice(0,2)]),O=$('#o3');O.innerHTML='';
+o.forEach((x,i)=>{const b=document.createElement('button');b.className='opt';b.style.background=COL[i];b.textContent=x;const me=G.id;
+b.onclick=()=>{if(x===c){G.s+=G.t?5:10;G.i++;good();$('#msg').textContent='✅ '+rule(w);$('#rocket').style.bottom=(G.i*8.5)+'%';O.querySelectorAll('button').forEach(z=>z.style.pointerEvents='none');setTimeout(()=>G.id===me&&n3(),1100)}else{G.t++;bad();b.classList.add('bad');$('#msg').style.color='var(--y)';$('#msg').textContent='💡 '+rule(w)}};O.appendChild(b)})}
+showBest();
+</script></body></html>
